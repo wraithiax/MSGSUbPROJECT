@@ -14,14 +14,15 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create admin user
-        User::create([
-            'username' => 'admin',
-            'email' => 'admin@psu.edu.ph',
-            'password' => Hash::make('admin1234'),
-            'role' => 'admin',
-            'force_password_change' => false,
-        ]);
+        User::updateOrCreate(
+            ['email' => 'admin@psu.edu.ph'],
+            [
+                'username' => 'admin',
+                'password' => Hash::make('admin1234'),
+                'role' => 'admin',
+                'force_password_change' => false,
+            ]
+        );
 
     }
 }

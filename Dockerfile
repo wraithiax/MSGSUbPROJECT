@@ -18,12 +18,12 @@ WORKDIR /var/www
 
 
 
-
 COPY . .
 
 
 # RUN composer install --no-dev --optimize-autoloader
 RUN composer install --no-dev -o
+RUN chmod +x docker/start.sh
 
 # Render provides runtime env vars (APP_KEY/DB_*). Avoid baking a .env + key into the image.
 
@@ -31,6 +31,4 @@ RUN composer install --no-dev -o
 EXPOSE 10000
 
 
-
-
-CMD sh -c "php artisan migrate --force && php artisan db:seed --class=UserSeeder --force && php -S 0.0.0.0:${PORT:-10000} -t public server.php"
+CMD ["./docker/start.sh"]
