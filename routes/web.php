@@ -3,6 +3,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\DegreeController;
+use App\Http\Controllers\DeploymentController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\CourseStudentController;
 use App\Http\Controllers\PostController;
@@ -12,6 +13,8 @@ use App\Http\Controllers\PagesController;
 use App\Http\Controllers\MaintenanceController;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
+
+Route::get('/deploy/setup', [DeploymentController::class, 'setup']);
 
 // Login routes (accessible without session)
 Route::get('/', [AuthController::class, 'showLogin'])->name('login');
