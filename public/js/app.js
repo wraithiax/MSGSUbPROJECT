@@ -305,10 +305,7 @@ if ($) {
             },
         });
 
-        loadUsers();
-        setInterval(function () {
-            loadUsers(true);
-        }, 5000);
+        loadUsers(true);
         toggleUserStudentFields();
 
         $('#open-create-user').on('click', function () {
@@ -417,6 +414,7 @@ if ($) {
             $.ajax({
                 url: indexUrl,
                 method: 'GET',
+                timeout: 15000,
                 success(response) {
                     renderUsers(response.users || []);
                 },

@@ -17,16 +17,17 @@ class UserController extends Controller
 
     public function index()
     {
-        $users = User::with(['profile', 'posts', 'student.degree'])->latest()->get();
+        $users = User::with(['profile', 'student.degree'])->withCount('posts')->latest()->get();
+        $formattedUsers = $users->map(fn ($user) => $this->formatUser($user));
         $degrees = Degree::all();
 
         if (request()->expectsJson()) {
             return response()->json([
-                'users' => $users->map(fn ($user) => $this->formatUser($user)),
+                'users' => $formattedUsers,
             ]);
         }
 
-        return view('user.index', compact('users', 'degrees'));
+        return view('user.index', compact('users', 'formattedUsers', 'degrees'));
     }
 
     public function create()
@@ -330,7 +331,7 @@ class UserController extends Controller
             'role_label' => ucfirst($user->normalizedRole()),
             'profile_status' => $user->profile ? 'Created' : 'Not yet',
             'profile_message' => $user->profile ? 'This user already has a profile.' : 'This user does not have a profile yet.',
-            'posts_count' => $user->relationLoaded('posts') ? $user->posts->count() : $user->posts()->count(),
+            'posts_count' => $user->posts_count ?? $user->posts()->count(),
             'joined' => $user->created_at?->format('F d, Y h:i A'),
             'student' => $user->student ? [
                 'fname' => $user->student->fname,

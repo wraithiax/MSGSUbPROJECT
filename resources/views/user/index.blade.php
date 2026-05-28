@@ -273,9 +273,25 @@
                 </tr>
             </thead>
             <tbody id="users-table-body">
-                <tr>
-                    <td colspan="7" style="padding: 2rem; text-align: center; color: #6b7280;">Loading users...</td>
-                </tr>
+                @forelse($formattedUsers as $user)
+                    <tr>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ $user['username'] }}</td>
+                        <td>{{ $user['email'] }}</td>
+                        <td>{{ $user['role_label'] }}</td>
+                        <td>{{ $user['profile_status'] }}</td>
+                        <td>{{ $user['posts_count'] }}</td>
+                        <td>
+                            <button type="button" class="user-btn view js-view-user" data-user="{{ rawurlencode(json_encode($user)) }}">View</button>
+                            <button type="button" class="user-btn edit js-edit-user" data-user="{{ rawurlencode(json_encode($user)) }}">Edit</button>
+                            <button type="button" class="user-btn delete js-delete-user" data-user="{{ rawurlencode(json_encode($user)) }}">Delete</button>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="7" style="padding: 2rem; text-align: center; color: #6b7280;">No users yet. Create one to get started.</td>
+                    </tr>
+                @endforelse
             </tbody>
         </table>
     </div>
@@ -284,7 +300,7 @@
         <div class="user-modal-card">
             <h2 id="user-form-title" style="color:#ec4899; margin-bottom: 1rem;">New User</h2>
 
-            <div id="user-form">
+            <form id="user-form">
                 @csrf
                 <input type="hidden" name="user_id" id="user_id">
 

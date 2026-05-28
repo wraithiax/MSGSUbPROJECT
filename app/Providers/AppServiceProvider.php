@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Pagination\Paginator;
 use App\Models\User;
 use App\Observers\UserObserver;
@@ -23,6 +24,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        if (
+            app()->environment('production') ||
+            str_starts_with((string) config('app.url'), 'https://') ||
+            request()->server('HTTP_X_FORWARDED_PROTO') === 'https'
+        ) {
+            URL::forceScheme('https');
+        }
+
         Schema::defaultStringLength(191);
         Paginator::useBootstrapFive();
         
